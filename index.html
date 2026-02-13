@@ -1,0 +1,344 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will you be my Valentine? 💖</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI','Poppins',sans-serif;}
+body{
+background:radial-gradient(circle at 10% 30%,#ffe9f2,#ffd9e8);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:1.5rem;
+overflow-x:hidden;
+}
+
+/* INTRO */
+#introScreen{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:black;
+color:white;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:9999;
+text-align:center;
+transition:opacity 1.5s ease;
+}
+
+/* Falling Stitch */
+.falling-stitch-container{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+pointer-events:none;
+z-index:10;
+display:none;
+}
+
+@keyframes fall{
+0%{transform:translateY(-20vh) rotate(0deg);}
+100%{transform:translateY(120vh) rotate(360deg);}
+}
+
+/* Main Card */
+.main-card{
+background:rgba(255,235,245,0.7);
+backdrop-filter:blur(15px);
+border-radius:40px;
+padding:2.5rem;
+max-width:900px;
+width:100%;
+text-align:center;
+box-shadow:0 20px 40px rgba(245,150,180,0.25);
+}
+
+h1{font-size:2.2rem;color:#a1325c;margin-bottom:1.5rem;}
+
+.button-group{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;}
+
+.btn{
+border:none;
+padding:0.9rem 2rem;
+font-size:1.5rem;
+border-radius:50px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.btn-yes{background:#ffa5b9;}
+.btn-no{background:#ffe2ec;}
+.btn:hover{transform:scale(1.05);}
+
+.hidden-section{display:none;}
+
+.stitch-icon-grid{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:2rem;
+margin-top:2rem;
+}
+
+.stitch-icon-item{cursor:pointer;transition:0.3s;}
+.stitch-icon-item:hover{transform:scale(1.1);}
+.stitch-icon-img{width:90px;}
+
+/* Modal */
+.modal-overlay{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(255,200,210,0.5);
+display:flex;
+justify-content:center;
+align-items:center;
+visibility:hidden;
+opacity:0;
+transition:0.3s;
+z-index:100;
+}
+
+.modal-overlay.active{visibility:visible;opacity:1;}
+
+.modal-content{
+background:white;
+border-radius:30px;
+padding:2rem;
+max-width:700px;
+width:90%;
+max-height:85vh;
+overflow-y:auto;
+text-align:center;
+}
+
+.close-btn{
+margin-top:1.5rem;
+padding:0.6rem 1.5rem;
+border:none;
+background:#ffc1cc;
+border-radius:30px;
+cursor:pointer;
+}
+
+.photo-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:1rem;
+margin-top:1rem;
+}
+
+.photo-item img{width:100%;border-radius:15px;}
+.caption{margin-top:0.5rem;font-size:0.9rem;font-style:italic;}
+
+#finalSecret{
+display:none;
+margin-top:1.5rem;
+padding:1rem;
+background:#fff0f5;
+border-radius:20px;
+font-weight:bold;
+color:#a1325c;
+}
+
+audio{display:none;}
+</style>
+</head>
+<body>
+
+<!-- INTRO SCREEN -->
+<div id="introScreen">
+<h1>I made something special for you...</h1>
+<p>Promise me you'll read till the end 💖</p>
+</div>
+
+<div id="fallingStitchContainer" class="falling-stitch-container"></div>
+
+<div class="main-card">
+
+<div id="questionPhase">
+<h1>Will you be my Valentine? 💖</h1>
+<div class="button-group">
+<button class="btn btn-yes" id="yesBtn">YES ❤️</button>
+<button class="btn btn-no" id="noBtn">NO 💔</button>
+</div>
+</div>
+
+<div id="acceptancePhase" class="hidden-section">
+<h2>Yay! You said YES! 💕</h2>
+
+<div class="stitch-icon-grid">
+<div class="stitch-icon-item" data-modal="heart">
+<img src="assets/stitch-heart.png" class="stitch-icon-img">
+</div>
+<div class="stitch-icon-item" data-modal="letter">
+<img src="assets/stitch-letter.png" class="stitch-icon-img">
+</div>
+<div class="stitch-icon-item" data-modal="camera">
+<img src="assets/stitch-camera.png" class="stitch-icon-img">
+</div>
+<div class="stitch-icon-item" data-modal="flower">
+<img src="assets/stitch-flower.png" class="stitch-icon-img">
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- HEART MODAL -->
+<div id="modalHeart" class="modal-overlay">
+<div class="modal-content">
+<h2>Our Love Story ❤️</h2>
+<p id="typewriterText" style="white-space:pre-line;"></p>
+<button class="close-btn">Close</button>
+</div>
+</div>
+
+<!-- LETTER MODAL -->
+<div id="modalLetter" class="modal-overlay">
+<div class="modal-content">
+<h2>Our Special Memory 💌</h2>
+<img src="assets/couple-main.jpg" style="width:100%;border-radius:20px;margin:1rem 0;">
+<video controls style="width:100%;border-radius:20px;">
+<source src="assets/special-video.mp4" type="video/mp4">
+</video>
+<button class="close-btn">Close</button>
+</div>
+</div>
+
+<!-- CAMERA MODAL -->
+<div id="modalCamera" class="modal-overlay">
+<div class="modal-content">
+<h2>Our Photo Album 📸</h2>
+<div class="photo-grid">
+<div class="photo-item"><img src="assets/photo1.jpg"><div class="caption">The day my world changed forever.</div></div>
+<div class="photo-item"><img src="assets/photo2.jpg"><div class="caption">Your smile is my safe place.</div></div>
+<div class="photo-item"><img src="assets/photo3.jpg"><div class="caption">With you, everything feels right.</div></div>
+<div class="photo-item"><img src="assets/photo4.jpg"><div class="caption">Every memory with you is magic.</div></div>
+<div class="photo-item"><img src="assets/photo5.jpg"><div class="caption">My favorite place is next to you.</div></div>
+</div>
+<button class="close-btn">Close</button>
+</div>
+</div>
+
+<!-- FLOWER MODAL -->
+<div id="modalFlower" class="modal-overlay">
+<div class="modal-content">
+<h2>Happy Valentine's Day 💐</h2>
+<p style="font-size:1.4rem;margin:1rem 0;">Will you be my Valentine forever?</p>
+<button class="close-btn">Close</button>
+
+<div id="finalSecret">
+I don’t just want one Valentine’s Day…
+I want every February 14 with you. 💘
+</div>
+
+</div>
+</div>
+
+<audio id="bgMusic" loop>
+<source src="assets/romantic-song.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const questionPhase=document.getElementById("questionPhase");
+const acceptancePhase=document.getElementById("acceptancePhase");
+const fallingContainer=document.getElementById("fallingStitchContainer");
+const bgMusic=document.getElementById("bgMusic");
+
+/* INTRO FADE */
+window.addEventListener("load",function(){
+setTimeout(()=>{
+document.getElementById("introScreen").style.opacity="0";
+setTimeout(()=>document.getElementById("introScreen").style.display="none",1500);
+},3000);
+});
+
+/* YES / NO */
+yesBtn.onclick=triggerAcceptance;
+
+noBtn.onclick=function(){
+this.textContent="YES ❤️";
+this.classList.remove("btn-no");
+this.classList.add("btn-yes");
+this.onclick=triggerAcceptance;
+};
+
+function triggerAcceptance(){
+questionPhase.style.display="none";
+acceptancePhase.classList.remove("hidden-section");
+bgMusic.play();
+startFalling();
+}
+
+/* Falling Effect */
+function startFalling(){
+fallingContainer.style.display="block";
+for(let i=0;i<30;i++){
+let img=document.createElement("img");
+img.src="assets/stitch-shower.png";
+img.style.position="absolute";
+img.style.left=Math.random()*100+"%";
+img.style.width="40px";
+img.style.animation="fall "+(5+Math.random()*5)+"s linear infinite";
+fallingContainer.appendChild(img);
+}
+}
+
+/* TYPEWRITER */
+const loveMessage=`From the day we met, something felt different.
+What started as simple conversations slowly turned into comfort,
+then laughter, then something deeper.
+We didn’t rush, we grew.
+From strangers to best friends,
+from best friends to something beautiful.
+And now I can’t imagine my world without you.
+You are my safe place, my happiness, my forever Valentine. 💖`;
+
+function typeWriterEffect(){
+let i=0;
+const el=document.getElementById("typewriterText");
+el.innerHTML="";
+function typing(){
+if(i<loveMessage.length){
+el.innerHTML+=loveMessage.charAt(i);
+i++;
+setTimeout(typing,40);
+}}
+typing();
+}
+
+/* Modal Handling */
+document.querySelectorAll(".stitch-icon-item").forEach(item=>{
+item.onclick=function(){
+let modal=document.getElementById("modal"+this.dataset.modal.charAt(0).toUpperCase()+this.dataset.modal.slice(1));
+modal.classList.add("active");
+if(this.dataset.modal==="heart"){
+typeWriterEffect();
+}
+};
+});
+
+document.querySelectorAll(".close-btn").forEach(btn=>{
+btn.onclick=function(){
+let modal=this.closest(".modal-overlay");
+modal.classList.remove("active");
+
+if(modal.id==="modalFlower"){
+document.getElementById("finalSecret").style.display="block";
+}
+};
+});
+</script>
+
+</body>
+</html>
